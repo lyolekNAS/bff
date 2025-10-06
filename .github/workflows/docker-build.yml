@@ -26,6 +26,7 @@ jobs:
             ${{ runner.os }}-maven-
 
       -   name: Run tests
+          run: ./mvnw clean verify
           env:
             CONFIG_SERVER_PASS: ${{ secrets.CONFIG_SERVER_PASS }}
             CONFIG_SERVER_URL: ${{ secrets.CONFIG_SERVER_URL }}
