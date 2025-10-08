@@ -49,14 +49,18 @@ public class BffHandler {
 
 					return reactiveAuthorizedClientManager.authorize(authorizeRequest)
 							.flatMap(client -> bffService.forwardRequest(request, url, client.getAccessToken().getTokenValue())
-									.flatMap(body -> ServerResponse.ok()
-											.contentType(MediaType.APPLICATION_JSON)
-											.bodyValue(body))
+									.flatMap(forwardedResponse -> {
+										// forwardedResponse містить статус і body
+										return ServerResponse.status(forwardedResponse.status())
+												.contentType(MediaType.APPLICATION_JSON)
+												.bodyValue(forwardedResponse.body());
+									})
 									.onErrorResume(e -> ServerResponse.status(HttpStatus.BAD_GATEWAY)
 											.bodyValue(Map.of("error", e.getMessage())))
 							)
 							.switchIfEmpty(ServerResponse.status(HttpStatus.UNAUTHORIZED)
 									.bodyValue(Map.of("error", "Not authorized")));
+
 				})
 				.switchIfEmpty(ServerResponse.status(HttpStatus.UNAUTHORIZED)
 						.bodyValue(Map.of("error", "User not authenticated")));
