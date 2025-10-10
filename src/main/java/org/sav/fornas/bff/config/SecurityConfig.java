@@ -20,7 +20,7 @@ import org.springframework.security.oauth2.client.web.server.ServerOAuth2Authori
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint;
 import org.springframework.security.web.server.authentication.ServerAuthenticationSuccessHandler;
-import reactor.core.publisher.Mono;
+import org.springframework.session.data.redis.config.annotation.web.server.EnableRedisWebSession;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -29,6 +29,7 @@ import java.util.Base64;
 @Configuration
 @EnableWebFluxSecurity
 @RequiredArgsConstructor
+@EnableRedisWebSession(maxInactiveIntervalInSeconds = 60*60*24*2, redisNamespace = "spring:session:bff")
 @Slf4j
 public class SecurityConfig {
 
