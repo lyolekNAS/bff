@@ -1,0 +1,29 @@
+logging:
+    level:
+        org.sav: INFO
+
+spring:
+    security:
+        oauth2:
+            client:
+                registration:
+                    cards:
+                        client-id: cards
+                        client-secret: test-secret
+                        authorization-grant-type: authorization_code
+                        redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+                provider:
+                    cards:
+                        authorization-uri: http://localhost/dummy-auth
+                        token-uri: http://localhost/dummy-token
+                        jwk-set-uri: http://localhost/dummy-jwks
+    config:
+        import:
+            - optional:configserver:${config.server.url}
+    cloud:
+        vault:
+            enabled: false
+app-props:
+    url:
+        iot-back: none
+        iot-manager: none
